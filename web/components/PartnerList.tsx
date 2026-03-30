@@ -13,14 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import { SendEmailDialog } from "@/components/SendEmailDialog";
 import { MoreHorizontal, Mail, Trash2 } from "lucide-react";
-
-const STATUS_LABEL: Record<PartnerStatus, string> = {
-  prospect: "Aday",
-  active: "Aktif",
-  inactive: "Pasif",
-};
 
 const STATUS_VARIANT: Record<
   PartnerStatus,
@@ -36,6 +31,7 @@ export function PartnerList() {
   const [loading, setLoading] = useState(true);
   const [emailTarget, setEmailTarget] = useState<Partner | null>(null);
   const { toast } = useToast();
+  const { t } = useI18n();
 
   const fetchPartners = useCallback(async () => {
     try {
@@ -44,13 +40,13 @@ export function PartnerList() {
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Partnerler yüklenemedi",
+        title: t("partners.loadError"),
         description: (err as Error).message,
       });
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [toast, t]);
 
   useEffect(() => {
     void fetchPartners();
@@ -60,11 +56,11 @@ export function PartnerList() {
     try {
       const updated = await partnersApi.updateStatus(id, status);
       setPartners((prev) => prev.map((p) => (p.id === id ? updated : p)));
-      toast({ title: "Durum güncellendi" });
+      toast({ title: t("partners.statusUpdated") });
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Güncellenemedi",
+        title: t("partners.updateError"),
         description: (err as Error).message,
       });
     }
@@ -74,11 +70,11 @@ export function PartnerList() {
     try {
       await partnersApi.delete(id);
       setPartners((prev) => prev.filter((p) => p.id !== id));
-      toast({ title: "Partner silindi" });
+      toast({ title: t("partners.deleted") });
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Silinemedi",
+        title: t("partners.deleteError"),
         description: (err as Error).message,
       });
     }
@@ -87,7 +83,7 @@ export function PartnerList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
-        Yükleniyor…
+        {t("partners.loading")}
       </div>
     );
   }
@@ -95,7 +91,7 @@ export function PartnerList() {
   if (partners.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-muted-foreground">
-        <p className="text-sm">Henüz partner yok.</p>
+        <p className="text-sm">{t("partners.empty")}</p>
       </div>
     );
   }
@@ -113,13 +109,13 @@ export function PartnerList() {
               <p className="text-sm text-muted-foreground">{p.email}</p>
               {p.contactName && (
                 <p className="text-xs text-muted-foreground">
-                  İletişim: {p.contactName}
+                  {t("partners.contact")} {p.contactName}
                 </p>
               )}
             </div>
 
             <Badge variant={STATUS_VARIANT[p.status]}>
-              {STATUS_LABEL[p.status]}
+              {t(`partners.statusLabel.${p.status}`)}
             </Badge>
 
             <DropdownMenu>
@@ -131,7 +127,7 @@ export function PartnerList() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setEmailTarget(p)}>
                   <Mail className="mr-2 h-4 w-4" />
-                  E-posta Gönder
+                  {t("partners.sendEmail")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {(["prospect", "active", "inactive"] as PartnerStatus[])
@@ -141,7 +137,7 @@ export function PartnerList() {
                       key={s}
                       onClick={() => handleStatusChange(p.id, s)}
                     >
-                      {STATUS_LABEL[s]} Yap
+                      {t(`partners.statusAction.${s}`)}
                     </DropdownMenuItem>
                   ))}
                 <DropdownMenuSeparator />
@@ -150,7 +146,7 @@ export function PartnerList() {
                   onClick={() => handleDelete(p.id)}
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Sil
+                  {t("partners.delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "meetings": "Meetings",
+    "partners": "Partners",
+    "signOut": "Sign Out"
+  },
+  "login": {
+    "subtitle": "Admin Panel",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "dashboard": {
+    "welcome": "Welcome to the team management panel.",
+    "tiles": {
+      "tasks": { "title": "Tasks", "description": "Manage team tasks and track statuses in real time." },
+      "meetings": { "title": "Meetings", "description": "Schedule meetings with Google Calendar & Meet integration." },
+      "partners": { "title": "Partners", "description": "Track partner relationships and send emails." }
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "description": "Task list synced via Firestore real-time listener.",
+    "newTask": "New Task",
+    "filterAll": "All",
+    "filterPending": "Pending",
+    "filterInProgress": "In Progress",
+    "filterDone": "Done",
+    "statusTodo": "Pending",
+    "statusInProgress": "In Progress",
+    "statusDone": "Done",
+    "loading": "Loading…",
+    "loadError": "Failed to load tasks. Please refresh the page.",
+    "empty": "No tasks yet.",
+    "emptyHint": "Add a new task from the top right.",
+    "due": "Due:",
+    "advance": "Move to next stage",
+    "updateError": "Failed to update status",
+    "deleteError": "Failed to delete task",
+    "delete": "Delete"
+  },
+  "meetings": {
+    "title": "Meetings",
+    "description": "Meeting management integrated with Google Calendar & Meet.",
+    "newMeeting": "New Meeting",
+    "loading": "Loading…",
+    "loadError": "Failed to load meetings",
+    "deleteError": "Failed to delete",
+    "deleted": "Meeting deleted",
+    "empty": "No meetings yet.",
+    "attendees": "attendees",
+    "join": "Join"
+  },
+  "partners": {
+    "title": "Partners",
+    "description": "Manage partner relationships and send emails.",
+    "newPartner": "New Partner",
+    "loading": "Loading…",
+    "loadError": "Failed to load partners",
+    "statusUpdated": "Status updated",
+    "updateError": "Update failed",
+    "deleted": "Partner deleted",
+    "deleteError": "Failed to delete",
+    "empty": "No partners yet.",
+    "contact": "Contact:",
+    "sendEmail": "Send Email",
+    "delete": "Delete",
+    "statusLabel": { "prospect": "Prospect", "active": "Active", "inactive": "Inactive" },
+    "statusAction": { "prospect": "Set as Prospect", "active": "Set as Active", "inactive": "Set as Inactive" }
+  },
+  "createTask": {
+    "created": "Task created",
+    "createError": "Failed to create task",
+    "dialogTitle": "New Task",
+    "labelTitle": "Title *",
+    "placeholderTitle": "Task title",
+    "labelDesc": "Description",
+    "placeholderDesc": "Optional description",
+    "labelDue": "Due Date",
+    "cancel": "Cancel",
+    "creating": "Creating…",
+    "create": "Create"
+  },
+  "createMeeting": {
+    "created": "Meeting created",
+    "createdDesc": "Google Meet link is ready.",
+    "createError": "Failed to create meeting",
+    "dialogTitle": "New Meeting",
+    "labelTitle": "Title *",
+    "placeholderTitle": "Meeting title",
+    "labelDesc": "Description",
+    "labelStart": "Start *",
+    "labelEnd": "End *",
+    "labelAttendees": "Attendees",
+    "attendeesHint": "(comma-separated emails)",
+    "cancel": "Cancel",
+    "creating": "Creating…",
+    "createAndGetLink": "Create & Get Meet Link"
+  },
+  "createPartner": {
+    "added": "Partner added",
+    "addError": "Failed to add partner",
+    "dialogTitle": "New Partner",
+    "labelName": "Company / Name *",
+    "labelEmail": "Email *",
+    "labelContact": "Contact Person",
+    "labelNotes": "Notes",
+    "cancel": "Cancel",
+    "adding": "Adding…",
+    "add": "Add"
+  },
+  "sendEmail": {
+    "queued": "Email queued",
+    "queuedDesc": "will be sent to",
+    "sendError": "Failed to send email",
+    "dialogTitle": "Send Email",
+    "to": "To:",
+    "labelSubject": "Subject *",
+    "labelBody": "Body *",
+    "bodyPlaceholder": "HTML is supported.",
+    "cancel": "Cancel",
+    "sending": "Sending…",
+    "send": "Send"
+  }
+}

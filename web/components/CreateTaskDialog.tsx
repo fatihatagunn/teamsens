@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { tasksApi } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ interface Props {
 
 export function CreateTaskDialog({ open, onOpenChange }: Props) {
   const { toast } = useToast();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", dueDate: "" });
 
@@ -36,13 +38,13 @@ export function CreateTaskDialog({ open, onOpenChange }: Props) {
         description: form.description.trim() || undefined,
         dueDate: form.dueDate || undefined,
       });
-      toast({ title: "Görev oluşturuldu" });
+      toast({ title: t("createTask.created") });
       setForm({ title: "", description: "", dueDate: "" });
       onOpenChange(false);
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Görev oluşturulamadı",
+        title: t("createTask.createError"),
         description: (err as Error).message,
       });
     } finally {
@@ -54,36 +56,36 @@ export function CreateTaskDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Yeni Görev</DialogTitle>
+          <DialogTitle>{t("createTask.dialogTitle")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="title">Başlık *</Label>
+            <Label htmlFor="title">{t("createTask.labelTitle")}</Label>
             <Input
               id="title"
               value={form.title}
               onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-              placeholder="Görev başlığı"
+              placeholder={t("createTask.placeholderTitle")}
               required
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="desc">Açıklama</Label>
+            <Label htmlFor="desc">{t("createTask.labelDesc")}</Label>
             <Textarea
               id="desc"
               value={form.description}
               onChange={(e) =>
                 setForm((f) => ({ ...f, description: e.target.value }))
               }
-              placeholder="İsteğe bağlı açıklama"
+              placeholder={t("createTask.placeholderDesc")}
               rows={3}
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="due">Bitiş Tarihi</Label>
+            <Label htmlFor="due">{t("createTask.labelDue")}</Label>
             <Input
               id="due"
               type="datetime-local"
@@ -100,10 +102,10 @@ export function CreateTaskDialog({ open, onOpenChange }: Props) {
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              İptal
+              {t("createTask.cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Oluşturuluyor…" : "Oluştur"}
+              {loading ? t("createTask.creating") : t("createTask.create")}
             </Button>
           </DialogFooter>
         </form>

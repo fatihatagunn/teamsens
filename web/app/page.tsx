@@ -1,46 +1,44 @@
-import Link from "next/link";
-import {
-  CheckSquare,
-  CalendarDays,
-  Handshake,
-  ArrowRight,
-} from "lucide-react";
+"use client";
 
-const tiles = [
-  {
-    href: "/tasks",
-    icon: CheckSquare,
-    title: "Görevler",
-    description: "Ekip görevlerini yönet, durumları anlık takip et.",
-    color: "text-blue-600",
-    bg: "bg-blue-50",
-  },
-  {
-    href: "/meetings",
-    icon: CalendarDays,
-    title: "Toplantılar",
-    description: "Google Calendar & Meet entegrasyonuyla toplantı planla.",
-    color: "text-green-600",
-    bg: "bg-green-50",
-  },
-  {
-    href: "/partners",
-    icon: Handshake,
-    title: "Partnerler",
-    description: "Partner ilişkilerini takip et, e-posta gönder.",
-    color: "text-purple-600",
-    bg: "bg-purple-50",
-  },
-] as const;
+import Link from "next/link";
+import { CheckSquare, CalendarDays, Handshake, ArrowRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export default function DashboardPage() {
+  const { t } = useI18n();
+
+  const tiles = [
+    {
+      href: "/tasks",
+      icon: CheckSquare,
+      title: t("dashboard.tiles.tasks.title"),
+      description: t("dashboard.tiles.tasks.description"),
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    {
+      href: "/meetings",
+      icon: CalendarDays,
+      title: t("dashboard.tiles.meetings.title"),
+      description: t("dashboard.tiles.meetings.description"),
+      color: "text-green-600",
+      bg: "bg-green-50",
+    },
+    {
+      href: "/partners",
+      icon: Handshake,
+      title: t("dashboard.tiles.partners.title"),
+      description: t("dashboard.tiles.partners.description"),
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-muted-foreground">
-          Ekip yönetim paneline hoşgeldin.
-        </p>
+        <p className="mt-1 text-muted-foreground">{t("dashboard.welcome")}</p>
       </header>
 
       <div className="grid gap-4 sm:grid-cols-3">

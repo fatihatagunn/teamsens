@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { meetingsApi } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ interface Props {
 
 export function CreateMeetingDialog({ open, onOpenChange }: Props) {
   const { toast } = useToast();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -49,13 +51,16 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
         endTime: new Date(form.endTime).toISOString(),
         attendees,
       });
-      toast({ title: "Toplantı oluşturuldu", description: "Google Meet linki hazırlandı." });
+      toast({
+        title: t("createMeeting.created"),
+        description: t("createMeeting.createdDesc"),
+      });
       setForm({ title: "", description: "", startTime: "", endTime: "", attendees: "" });
       onOpenChange(false);
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Toplantı oluşturulamadı",
+        title: t("createMeeting.createError"),
         description: (err as Error).message,
       });
     } finally {
@@ -67,23 +72,23 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Yeni Toplantı</DialogTitle>
+          <DialogTitle>{t("createMeeting.dialogTitle")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="m-title">Başlık *</Label>
+            <Label htmlFor="m-title">{t("createMeeting.labelTitle")}</Label>
             <Input
               id="m-title"
               value={form.title}
               onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-              placeholder="Toplantı başlığı"
+              placeholder={t("createMeeting.placeholderTitle")}
               required
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="m-desc">Açıklama</Label>
+            <Label htmlFor="m-desc">{t("createMeeting.labelDesc")}</Label>
             <Textarea
               id="m-desc"
               value={form.description}
@@ -96,7 +101,7 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="m-start">Başlangıç *</Label>
+              <Label htmlFor="m-start">{t("createMeeting.labelStart")}</Label>
               <Input
                 id="m-start"
                 type="datetime-local"
@@ -108,7 +113,7 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="m-end">Bitiş *</Label>
+              <Label htmlFor="m-end">{t("createMeeting.labelEnd")}</Label>
               <Input
                 id="m-end"
                 type="datetime-local"
@@ -123,9 +128,9 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="m-attendees">
-              Katılımcılar{" "}
+              {t("createMeeting.labelAttendees")}{" "}
               <span className="text-xs text-muted-foreground">
-                (virgülle ayrılmış e-postalar)
+                {t("createMeeting.attendeesHint")}
               </span>
             </Label>
             <Input
@@ -144,10 +149,10 @@ export function CreateMeetingDialog({ open, onOpenChange }: Props) {
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              İptal
+              {t("createMeeting.cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Oluşturuluyor…" : "Oluştur & Meet Linki Al"}
+              {loading ? t("createMeeting.creating") : t("createMeeting.createAndGetLink")}
             </Button>
           </DialogFooter>
         </form>

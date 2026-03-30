@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "tasks": "Görevler",
+    "meetings": "Toplantılar",
+    "partners": "Partnerler",
+    "signOut": "Çıkış Yap"
+  },
+  "login": {
+    "subtitle": "Admin Panel",
+    "signInWithGoogle": "Google ile Giriş Yap"
+  },
+  "dashboard": {
+    "welcome": "Ekip yönetim paneline hoşgeldin.",
+    "tiles": {
+      "tasks": { "title": "Görevler", "description": "Ekip görevlerini yönet, durumları anlık takip et." },
+      "meetings": { "title": "Toplantılar", "description": "Google Calendar & Meet entegrasyonuyla toplantı planla." },
+      "partners": { "title": "Partnerler", "description": "Partner ilişkilerini takip et, e-posta gönder." }
+    }
+  },
+  "tasks": {
+    "title": "Görevler",
+    "description": "Firestore anlık dinleme ile senkronize görev listesi.",
+    "newTask": "Yeni Görev",
+    "filterAll": "Tümü",
+    "filterPending": "Bekliyor",
+    "filterInProgress": "Devam Ediyor",
+    "filterDone": "Tamamlandı",
+    "statusTodo": "Bekliyor",
+    "statusInProgress": "Devam Ediyor",
+    "statusDone": "Tamamlandı",
+    "loading": "Yükleniyor…",
+    "loadError": "Görevler yüklenemedi. Lütfen sayfayı yenileyin.",
+    "empty": "Henüz görev yok.",
+    "emptyHint": "Sağ üstten yeni görev ekle.",
+    "due": "Bitiş:",
+    "advance": "Sonraki aşamaya geçir",
+    "updateError": "Durum güncellenemedi",
+    "deleteError": "Görev silinemedi",
+    "delete": "Sil"
+  },
+  "meetings": {
+    "title": "Toplantılar",
+    "description": "Google Calendar & Meet ile entegre toplantı yönetimi.",
+    "newMeeting": "Yeni Toplantı",
+    "loading": "Yükleniyor…",
+    "loadError": "Toplantılar yüklenemedi",
+    "deleteError": "Silinemedi",
+    "deleted": "Toplantı silindi",
+    "empty": "Henüz toplantı yok.",
+    "attendees": "katılımcı",
+    "join": "Katıl"
+  },
+  "partners": {
+    "title": "Partnerler",
+    "description": "Partner ilişkilerini yönet ve e-posta gönder.",
+    "newPartner": "Yeni Partner",
+    "loading": "Yükleniyor…",
+    "loadError": "Partnerler yüklenemedi",
+    "statusUpdated": "Durum güncellendi",
+    "updateError": "Güncellenemedi",
+    "deleted": "Partner silindi",
+    "deleteError": "Silinemedi",
+    "empty": "Henüz partner yok.",
+    "contact": "İletişim:",
+    "sendEmail": "E-posta Gönder",
+    "delete": "Sil",
+    "statusLabel": { "prospect": "Aday", "active": "Aktif", "inactive": "Pasif" },
+    "statusAction": { "prospect": "Aday Yap", "active": "Aktif Yap", "inactive": "Pasif Yap" }
+  },
+  "createTask": {
+    "created": "Görev oluşturuldu",
+    "createError": "Görev oluşturulamadı",
+    "dialogTitle": "Yeni Görev",
+    "labelTitle": "Başlık *",
+    "placeholderTitle": "Görev başlığı",
+    "labelDesc": "Açıklama",
+    "placeholderDesc": "İsteğe bağlı açıklama",
+    "labelDue": "Bitiş Tarihi",
+    "cancel": "İptal",
+    "creating": "Oluşturuluyor…",
+    "create": "Oluştur"
+  },
+  "createMeeting": {
+    "created": "Toplantı oluşturuldu",
+    "createdDesc": "Google Meet linki hazırlandı.",
+    "createError": "Toplantı oluşturulamadı",
+    "dialogTitle": "Yeni Toplantı",
+    "labelTitle": "Başlık *",
+    "placeholderTitle": "Toplantı başlığı",
+    "labelDesc": "Açıklama",
+    "labelStart": "Başlangıç *",
+    "labelEnd": "Bitiş *",
+    "labelAttendees": "Katılımcılar",
+    "attendeesHint": "(virgülle ayrılmış e-postalar)",
+    "cancel": "İptal",
+    "creating": "Oluşturuluyor…",
+    "createAndGetLink": "Oluştur & Meet Linki Al"
+  },
+  "createPartner": {
+    "added": "Partner eklendi",
+    "addError": "Partner eklenemedi",
+    "dialogTitle": "Yeni Partner",
+    "labelName": "Şirket / Kişi Adı *",
+    "labelEmail": "E-posta *",
+    "labelContact": "İletişim Kişisi",
+    "labelNotes": "Notlar",
+    "cancel": "İptal",
+    "adding": "Ekleniyor…",
+    "add": "Ekle"
+  },
+  "sendEmail": {
+    "queued": "E-posta kuyruğa alındı",
+    "queuedDesc": "adresine gönderilecek.",
+    "sendError": "E-posta gönderilemedi",
+    "dialogTitle": "E-posta Gönder",
+    "to": "Alıcı:",
+    "labelSubject": "Konu *",
+    "labelBody": "İçerik *",
+    "bodyPlaceholder": "HTML desteklenmektedir.",
+    "cancel": "İptal",
+    "sending": "Gönderiliyor…",
+    "send": "Gönder"
+  }
+}

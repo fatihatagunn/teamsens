@@ -5,6 +5,7 @@ import { meetingsApi } from "@/lib/api";
 import type { Meeting } from "@/types";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import {
   Video,
   CalendarCheck,
@@ -13,12 +14,12 @@ import {
   Users,
 } from "lucide-react";
 import { format } from "date-fns";
-import { tr } from "date-fns/locale";
 
 export function MeetingList() {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { t, dateLocale } = useI18n();
 
   const fetchMeetings = async () => {
     try {
@@ -27,7 +28,7 @@ export function MeetingList() {
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Toplantılar yüklenemedi",
+        title: t("meetings.loadError"),
         description: (err as Error).message,
       });
     } finally {
@@ -44,11 +45,11 @@ export function MeetingList() {
     try {
       await meetingsApi.delete(id);
       setMeetings((prev) => prev.filter((m) => m.id !== id));
-      toast({ title: "Toplantı silindi" });
+      toast({ title: t("meetings.deleted") });
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Silinemedi",
+        title: t("meetings.deleteError"),
         description: (err as Error).message,
       });
     }
@@ -57,7 +58,7 @@ export function MeetingList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
-        Yükleniyor…
+        {t("meetings.loading")}
       </div>
     );
   }
@@ -66,7 +67,7 @@ export function MeetingList() {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-muted-foreground">
         <CalendarCheck className="mb-2 h-8 w-8" />
-        <p className="text-sm">Henüz toplantı yok.</p>
+        <p className="text-sm">{t("meetings.empty")}</p>
       </div>
     );
   }
@@ -89,15 +90,15 @@ export function MeetingList() {
               <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span>
                   {format(new Date(m.startTime), "d MMM yyyy HH:mm", {
-                    locale: tr,
+                    locale: dateLocale,
                   })}{" "}
                   –{" "}
-                  {format(new Date(m.endTime), "HH:mm", { locale: tr })}
+                  {format(new Date(m.endTime), "HH:mm", { locale: dateLocale })}
                 </span>
                 {m.attendees.length > 0 && (
                   <span className="flex items-center gap-1">
                     <Users className="h-3 w-3" />
-                    {m.attendees.length} katılımcı
+                    {m.attendees.length} {t("meetings.attendees")}
                   </span>
                 )}
               </div>
@@ -112,7 +113,7 @@ export function MeetingList() {
                     rel="noreferrer"
                   >
                     <Video className="mr-1.5 h-3.5 w-3.5" />
-                    Katıl
+                    {t("meetings.join")}
                   </a>
                 </Button>
               )}

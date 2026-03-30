@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { partnersApi } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import type { Partner } from "@/types";
 import {
   Dialog,
@@ -24,6 +25,7 @@ interface Props {
 
 export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
   const { toast } = useToast();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ subject: "", body: "" });
 
@@ -38,15 +40,15 @@ export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
         body: form.body.trim(),
       });
       toast({
-        title: "E-posta kuyruğa alındı",
-        description: `${partner.email} adresine gönderilecek.`,
+        title: t("sendEmail.queued"),
+        description: `${partner.email} ${t("sendEmail.queuedDesc")}`,
       });
       setForm({ subject: "", body: "" });
       onOpenChange(false);
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "E-posta gönderilemedi",
+        title: t("sendEmail.sendError"),
         description: (err as Error).message,
       });
     } finally {
@@ -58,18 +60,19 @@ export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>E-posta Gönder — {partner.name}</DialogTitle>
+          <DialogTitle>{t("sendEmail.dialogTitle")} — {partner.name}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <p className="text-sm text-muted-foreground">
-              Alıcı: <span className="font-medium text-foreground">{partner.email}</span>
+              {t("sendEmail.to")}{" "}
+              <span className="font-medium text-foreground">{partner.email}</span>
             </p>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="e-subject">Konu *</Label>
+            <Label htmlFor="e-subject">{t("sendEmail.labelSubject")}</Label>
             <Input
               id="e-subject"
               value={form.subject}
@@ -81,7 +84,7 @@ export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="e-body">İçerik *</Label>
+            <Label htmlFor="e-body">{t("sendEmail.labelBody")}</Label>
             <Textarea
               id="e-body"
               value={form.body}
@@ -89,7 +92,7 @@ export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
                 setForm((f) => ({ ...f, body: e.target.value }))
               }
               rows={5}
-              placeholder="HTML desteklenmektedir."
+              placeholder={t("sendEmail.bodyPlaceholder")}
               required
             />
           </div>
@@ -100,10 +103,10 @@ export function SendEmailDialog({ partner, open, onOpenChange }: Props) {
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              İptal
+              {t("sendEmail.cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Gönderiliyor…" : "Gönder"}
+              {loading ? t("sendEmail.sending") : t("sendEmail.send")}
             </Button>
           </DialogFooter>
         </form>

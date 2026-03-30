@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { partnersApi } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
+import { useI18n } from "@/lib/i18n";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ interface Props {
 
 export function CreatePartnerDialog({ open, onOpenChange }: Props) {
   const { toast } = useToast();
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -42,13 +44,13 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
         contactName: form.contactName.trim() || undefined,
         notes: form.notes.trim() || undefined,
       });
-      toast({ title: "Partner eklendi" });
+      toast({ title: t("createPartner.added") });
       setForm({ name: "", email: "", contactName: "", notes: "" });
       onOpenChange(false);
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Partner eklenemedi",
+        title: t("createPartner.addError"),
         description: (err as Error).message,
       });
     } finally {
@@ -60,12 +62,12 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Yeni Partner</DialogTitle>
+          <DialogTitle>{t("createPartner.dialogTitle")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="p-name">Şirket / Kişi Adı *</Label>
+            <Label htmlFor="p-name">{t("createPartner.labelName")}</Label>
             <Input
               id="p-name"
               value={form.name}
@@ -74,7 +76,7 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="p-email">E-posta *</Label>
+            <Label htmlFor="p-email">{t("createPartner.labelEmail")}</Label>
             <Input
               id="p-email"
               type="email"
@@ -86,7 +88,7 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="p-contact">İletişim Kişisi</Label>
+            <Label htmlFor="p-contact">{t("createPartner.labelContact")}</Label>
             <Input
               id="p-contact"
               value={form.contactName}
@@ -96,7 +98,7 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="p-notes">Notlar</Label>
+            <Label htmlFor="p-notes">{t("createPartner.labelNotes")}</Label>
             <Textarea
               id="p-notes"
               value={form.notes}
@@ -113,10 +115,10 @@ export function CreatePartnerDialog({ open, onOpenChange }: Props) {
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              İptal
+              {t("createPartner.cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Ekleniyor…" : "Ekle"}
+              {loading ? t("createPartner.adding") : t("createPartner.add")}
             </Button>
           </DialogFooter>
         </form>

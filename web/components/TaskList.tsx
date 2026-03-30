@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { tasksApi } from "@/lib/api";
+import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import type { Task, TaskStatus, TaskDoc } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -34,15 +35,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { MoreHorizontal, Trash2, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
-import { tr } from "date-fns/locale";
 
 // ─── Status helpers ───────────────────────────────────────────────────────────
-
-const STATUS_LABEL: Record<TaskStatus, string> = {
-  todo: "Bekliyor",
-  in_progress: "Devam Ediyor",
-  done: "Tamamlandı",
-};
 
 const STATUS_VARIANT: Record<
   TaskStatus,
@@ -90,6 +84,13 @@ export function TaskList({ statusFilter }: TaskListProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const { t, dateLocale } = useI18n();
+
+  const STATUS_LABEL: Record<TaskStatus, string> = {
+    todo: t("tasks.statusTodo"),
+    in_progress: t("tasks.statusInProgress"),
+    done: t("tasks.statusDone"),
+  };
 
   // ── Firestore real-time subscription ───────────────────────────────────────
   useEffect(() => {
@@ -112,14 +113,14 @@ export function TaskList({ statusFilter }: TaskListProps) {
       },
       (err: FirestoreError) => {
         console.error("Firestore snapshot error:", err);
-        setError("Görevler yüklenemedi. Lütfen sayfayı yenileyin.");
+        setError(t("tasks.loadError"));
         setLoading(false);
       }
     );
 
     // Cleanup: unsubscribe when filter changes or component unmounts
     return unsubscribe;
-  }, [statusFilter]);
+  }, [statusFilter, t]);
 
   // ── Status transition ───────────────────────────────────────────────────────
   const handleAdvanceStatus = useCallback(
@@ -132,12 +133,12 @@ export function TaskList({ statusFilter }: TaskListProps) {
       } catch (err) {
         toast({
           variant: "destructive",
-          title: "Durum güncellenemedi",
+          title: t("tasks.updateError"),
           description: (err as Error).message,
         });
       }
     },
-    [toast]
+    [toast, t]
   );
 
   // ── Delete ──────────────────────────────────────────────────────────────────
@@ -148,19 +149,19 @@ export function TaskList({ statusFilter }: TaskListProps) {
       } catch (err) {
         toast({
           variant: "destructive",
-          title: "Görev silinemedi",
+          title: t("tasks.deleteError"),
           description: (err as Error).message,
         });
       }
     },
-    [toast]
+    [toast, t]
   );
 
   // ── Render ──────────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
-        Yükleniyor…
+        {t("tasks.loading")}
       </div>
     );
   }
@@ -176,8 +177,8 @@ export function TaskList({ statusFilter }: TaskListProps) {
   if (tasks.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-muted-foreground">
-        <p className="text-sm">Henüz görev yok.</p>
-        <p className="text-xs mt-1">Sağ üstten yeni görev ekle.</p>
+        <p className="text-sm">{t("tasks.empty")}</p>
+        <p className="text-xs mt-1">{t("tasks.emptyHint")}</p>
       </div>
     );
   }
@@ -217,8 +218,8 @@ export function TaskList({ statusFilter }: TaskListProps) {
             )}
             {task.dueDate && (
               <p className="mt-1 text-xs text-muted-foreground">
-                Bitiş:{" "}
-                {format(new Date(task.dueDate), "d MMM yyyy", { locale: tr })}
+                {t("tasks.due")}{" "}
+                {format(new Date(task.dueDate), "d MMM yyyy", { locale: dateLocale })}
               </p>
             )}
           </div>
@@ -230,7 +231,7 @@ export function TaskList({ statusFilter }: TaskListProps) {
                 size="sm"
                 variant="outline"
                 onClick={() => handleAdvanceStatus(task)}
-                title="Sonraki aşamaya geçir"
+                title={t("tasks.advance")}
               >
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
@@ -248,7 +249,7 @@ export function TaskList({ statusFilter }: TaskListProps) {
                   onClick={() => handleDelete(task.id)}
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Sil
+                  {t("tasks.delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
