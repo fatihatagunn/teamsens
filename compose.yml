@@ -1,0 +1,90 @@
+# Docker Compose — Development environment
+#
+# Usage:
+#   docker compose up          # start all services
+#   docker compose up api      # Go backend only
+#   docker compose up web      # Next.js dev server only
+#
+# First-time setup:
+#   cp .env.example .env       # fill in the values
+#
+# Note: This file is for DEVELOPMENT only.
+#       For production use `docker build` + `docker run` or cloudbuild.yaml.
+
+services:
+
+  # ── Redis (Asynq job queue) ────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  # ── Go + Air (hot-reload) ──────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      target: go-dev
+    volumes:
+      - .:/app
+      - go-pkg:/root/go/pkg
+      - air-tmp:/app/.air
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      TASK_DRIVER: asynq
+      REDIS_ADDR: redis:6379  # compose service name, not localhost
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ── Asynq worker (development only — production uses Cloud Tasks) ──────────
+  worker:
+    build:
+      context: .
+      target: go-dev
+    command: ["air", "-c", ".air.worker.toml"]
+    volumes:
+      - .:/app
+      - go-pkg:/root/go/pkg
+      - air-worker-tmp:/app/.air-worker
+    env_file: .env
+    environment:
+      REDIS_ADDR: redis:6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ── Next.js dev server ─────────────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      target: web-dev         # dev stage in Dockerfile
+    volumes:
+      - ./web:/app/web                        # live-mount source code
+      - web-node-modules:/app/web/node_modules  # isolate node_modules from host
+    ports:
+      - "3000:3000"
+    environment:
+      # point to the api service name (not localhost)
+      BACKEND_URL: http://api:8080
+      # Firebase public config (ya .env'den oku ya da buraya yaz)
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+      NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  go-pkg:
+  air-tmp:
+  air-worker-tmp:
+  web-node-modules:

@@ -1,0 +1,28 @@
+# Air — Worker hot-reload configuration
+root = "."
+tmp_dir = ".air-worker"
+
+[build]
+  cmd          = "go build -o .air-worker/worker ./cmd/worker"
+  bin          = ".air-worker/worker"
+  full_bin     = ".air-worker/worker"
+  include_ext  = ["go"]
+  exclude_dir  = ["web", "vendor", ".air", ".air-worker", "static"]
+  exclude_regex = ["_test\\.go$"]
+  delay        = 500
+  kill_delay   = "200ms"
+  send_interrupt = true
+  stop_on_error  = true
+  log          = "air-worker.log"
+
+[log]
+  time      = false
+  main_only = false
+
+[color]
+  main    = "cyan"
+  build   = "yellow"
+  runner  = "green"
+
+[misc]
+  clean_on_exit = true

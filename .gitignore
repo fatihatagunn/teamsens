@@ -1,0 +1,25 @@
+# Secrets
+.env*
+!.env.template
+.secrets/
+
+# Go
+/teamsens
+*.exe
+*.test
+vendor/
+.air/
+.air-worker/
+air.log
+air-worker.log
+
+# Next.js
+web/.next/
+web/out/
+web/node_modules/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
